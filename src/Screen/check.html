@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <select name="type" id="type">
+        <option value="year">Ngày (day)</option>
+        <option value="month">Tháng (month)</option>
+    </select>
+    <div style="width:50%">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const choose = document.getElementById('type');
+        const ctx = document.getElementById('myChart');
+        var months = Array.from({ length: 12 }, (_, i) => i + 1);
+        var days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+        let mychart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Lượt đơn trong tháng',
+                    data: {{ orders_by_month }},
+            borderWidth: 1
+        }]
+    },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+  });
+
+        choose.addEventListener('change', function (event) {
+            mychart.destroy()
+            var selectedValue = event.target.value;
+            if (selectedValue == "month") {
+                mychart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Lượt đơn trong tháng',
+                            data: {{ orders_by_month }},
+                    borderWidth: 1
+                }]
+    },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+            }else {
+            mychart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: days,
+                    datasets: [{
+                        label: 'Lượt đơn theo ngày',
+                        data: {{ orders_by_day }},
+                borderWidth: 1
+            }]
+    },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+  });
+            }
+        });
+
+    </script>
+</body>
+
+</html>
